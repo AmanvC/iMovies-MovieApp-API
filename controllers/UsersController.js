@@ -4,10 +4,11 @@ const jwt = require("jsonwebtoken");
 
 module.exports.createSession = async (req, res) => {
 	try{
-		const data = req.body;
+		const data = req.body.params;
 		const user = await User.findOne({username: data.username}).lean();
+    console.log(data)
 		if(!user){
-			return res.status(200).json({
+			return res.status(404).json({
 				success: true,
 				message: "User does not exist!"
 			})
@@ -36,7 +37,13 @@ module.exports.createSession = async (req, res) => {
 
 module.exports.createUser = async (req, res) => {
 	try{
-		const data = req.body;
+		const data = req.body.params;
+    if(!data.username || !data.email || !data.password || !data.passwordAgain){
+      return res.status(400).json({
+        success: true,
+        message: "Invalid data!"
+      })
+    }
 		const userEmail = await User.findOne({email: data.email});
 		if(userEmail){
 			return res.status(403).json({
