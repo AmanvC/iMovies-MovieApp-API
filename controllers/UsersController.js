@@ -6,7 +6,6 @@ module.exports.createSession = async (req, res) => {
 	try{
 		const data = req.body.params;
 		const user = await User.findOne({username: data.username}).lean();
-    console.log(data)
 		if(!user){
 			return res.status(404).json({
 				success: true,
